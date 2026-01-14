@@ -17,18 +17,38 @@ NDirectoryTree > .directory-tree--extension, DirectoryTree > .directory-tree--ex
     padding: 1;
 }
 
+ModalScreen {
+    align: center middle;
+}
+
 #modal_grid {
     grid-size: 2;
+    grid-rows: auto auto auto;
     grid-gutter: 1;
-    padding: 1;
-    width: 40;
-    height: 11;
+    padding: 1 2;
+    width: 60;
+    height: auto;
+    min-height: 12;
     border: thick $primary;
     background: $surface;
-    align: center middle;
+    color: $text;
 }
 
 #label {
     column-span: 2;
     content-align: center middle;
+    text-style: bold;
+    color: $accent;
+    margin-bottom: 1;
+}
+
+#folder_name, #new_name_input {
+    column-span: 2;
+    border: tall $secondary;
+    background: $boost;
+    color: $text;
+}
+
+#create, #rename_btn, #cancel, #cancel_btn {
+    width: 100%;
 }

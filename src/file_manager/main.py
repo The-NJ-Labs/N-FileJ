@@ -4,7 +4,12 @@ import subprocess
 from textual import events
 from textual.app import App, ComposeResult
 from textual.widgets import Header, Footer, DirectoryTree
-from .create_folder import CreateFolderModal
+if __package__ is None or __package__ == "":
+    from create_folder import CreateFolderModal
+    from rename_modal import RenameModal
+else:
+    from .create_folder import CreateFolderModal
+    from .rename_modal import RenameModal
 
 class NDirectoryTree(DirectoryTree):
     """Custom DirectoryTree that tracks double clicks and Enter key."""
@@ -27,7 +32,8 @@ class NFileJ(App):
         ("^\\", "toggle_dark", "Toggle dark mode"),
         ("q", "quit", "Quit"),
         ("ctrl+shift+n", "mkdir", "Create Folder"),
-        ("delete", "delete", "Delete Folder/File")
+        ("delete", "delete", "Delete Folder/File"),
+        ("f2", "rename", "Rename Folder/File")
     ]
 
     def compose(self) -> ComposeResult:
@@ -91,6 +97,28 @@ class NFileJ(App):
                 self.notify(f"Deleted: {file_path}")
             except Exception as e:
                 self.notify(f"Error: {e}", severity="error")    
+
+    def action_rename(self) -> None:
+        tree = self.query_one(DirectoryTree)
+        if not tree.cursor_node or not tree.cursor_node.data:
+            return
+
+        old_path = tree.cursor_node.data.path
+        old_name = old_path.name
+
+        def perform_rename(new_name: str | None):
+            if new_name and new_name != old_name:
+                # Create the full new path
+                new_path = old_path.with_name(new_name)
+                
+                try:
+                    os.rename(old_path, new_path)
+                    tree.reload() # Refresh the tree to show the change
+                    self.notify(f"Renamed to {new_name}")
+                except Exception as e:
+                    self.notify(f"Error: {e}", severity="error")
+
+        self.push_screen(RenameModal(old_name), perform_rename)      
 
     def action_toggle_dark(self) -> None:
         self.theme = ("textual-light" if self.theme == "textual-dark" else "textual-dark")
