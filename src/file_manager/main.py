@@ -29,9 +29,9 @@ class NFileJ(App):
 
     # Removed "enter" from here because the Tree handles it internally
     BINDINGS = [
-        ("^\\", "toggle_dark", "Toggle dark mode"),
+        ("alt+t", "toggle_dark", "Toggle mode(Dark/Light)"),
         ("q", "quit", "Quit"),
-        ("ctrl+shift+n", "mkdir", "Create Folder"),
+        ("alt+shift+n", "mkdir", "Create Folder"),
         ("delete", "delete", "Delete Folder/File"),
         ("f2", "rename", "Rename Folder/File")
     ]
