@@ -23,7 +23,7 @@ class NFileJ(App):
     def compose(self) -> ComposeResult:
         yield Header()
         # DirectoryTree handles its own navigation (Enter to expand/select)
-        yield DirectoryTree("~", id="tree-container")
+        yield DirectoryTree(os.path.expanduser("~"), id="tree-container")
         yield Footer()
 
     def on_directory_tree_file_selected(self, event: DirectoryTree.FileSelected) -> None:
@@ -46,6 +46,9 @@ class NFileJ(App):
     def action_toggle_dark(self) -> None:
         self.theme = ("textual-light" if self.theme == "textual-dark" else "textual-dark")
 
-if __name__ == "__main__":
+def main():
     app = NFileJ()
     app.run()
+
+if __name__ == "__main__":
+    main()

@@ -54,8 +54,8 @@ wheels = [
 
 [[package]]
 name = "n-filej"
-version = "0.1.0"
-source = { virtual = "." }
+version = "0.0.2"
+source = { editable = "." }
 dependencies = [
     { name = "rich" },
     { name = "textual" },
