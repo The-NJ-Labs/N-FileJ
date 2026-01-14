@@ -1,18 +1,34 @@
 Screen {
-        background: #1a1b26;
-    }
+    background: #1a1b26;
+}
 
-    DirectoryTree {
-        border: tall $accent;
-        background: $surface;
-        color: #a9b1d6;
-    }
+NDirectoryTree, DirectoryTree {
+    border: tall $accent;
+    background: $surface;
+    color: #a9b1d6;
+}
 
-    DirectoryTree > .directory-tree--extension {
-        color: $secondary;
-    }
+NDirectoryTree > .directory-tree--extension, DirectoryTree > .directory-tree--extension {
+    color: $secondary;
+}
 
-    #preview-pane {
-        border: solid $primary;
-        padding: 1;
-    }
+#preview-pane {
+    border: solid $primary;
+    padding: 1;
+}
+
+#modal_grid {
+    grid-size: 2;
+    grid-gutter: 1;
+    padding: 1;
+    width: 40;
+    height: 11;
+    border: thick $primary;
+    background: $surface;
+    align: center middle;
+}
+
+#label {
+    column-span: 2;
+    content-align: center middle;
+}
