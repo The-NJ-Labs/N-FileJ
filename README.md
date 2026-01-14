@@ -34,6 +34,9 @@ n-filej
 
 ## Keybindings
 - `Q`: Quit the application
-- `^ / \`: Toggle Dark mode
+- `Alt+T`: Toggle Dark mode
+- `Alt+Shift+N`: Create a new folder
+- `Delete`: Delete a folder/file
+- `F2`: Rename a folder/file
 - `Enter`: Open a file or expand/collapse a directory
 - `Arrow Keys`: Navigate the file tree
