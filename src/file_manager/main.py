@@ -7,12 +7,7 @@ from textual.widgets import Header, Footer, DirectoryTree
 class NFileJ(App):
     """A simple file manager app."""
 
-    CSS = """
-    #tree-container {
-        width: 100%;
-        height: 100%;
-    }
-    """
+    CSS_PATH = "main.tcss"
 
     # Removed "enter" from here because the Tree handles it internally
     BINDINGS = [

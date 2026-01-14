@@ -1,0 +1,18 @@
+Screen {
+        background: #1a1b26;
+    }
+
+    DirectoryTree {
+        border: tall $accent;
+        background: $surface;
+        color: #a9b1d6;
+    }
+
+    DirectoryTree > .directory-tree--extension {
+        color: $secondary;
+    }
+
+    #preview-pane {
+        border: solid $primary;
+        padding: 1;
+    }
