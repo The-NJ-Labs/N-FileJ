@@ -6,6 +6,7 @@ A TUI-Based File manager written in Python using [Textual](https://github.com/Te
 - **Directory Navigation**: Browse your files and folders in a terminal-based interface.
 - **File Opening**: Open files directly in your system's default editor (Windows) or the one defined in your `$EDITOR` environment variable (Linux/macOS).
 - **Dark Mode**: Support for both light and dark themes.
+- **Many Themes**: Includes all Textual themes
 - **Lightweight**: fast and simple, built for the terminal.
 
 ## Installation
