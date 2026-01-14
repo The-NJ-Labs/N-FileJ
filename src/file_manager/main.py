@@ -4,7 +4,7 @@ import subprocess
 from textual import events
 from textual.app import App, ComposeResult
 from textual.widgets import Header, Footer, DirectoryTree
-from create_folder import CreateFolderModal
+from .create_folder import CreateFolderModal
 
 class NDirectoryTree(DirectoryTree):
     """Custom DirectoryTree that tracks double clicks and Enter key."""
