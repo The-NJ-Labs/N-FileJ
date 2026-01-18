@@ -2,6 +2,7 @@
 
 A TUI-Based File manager written in Python using [Textual](https://github.com/Textualize/textual).
 
+[![PyPI Downloads](https://static.pepy.tech/personalized-badge/n-filej?period=total&units=INTERNATIONAL_SYSTEM&left_color=BLACK&right_color=GREEN&left_text=Downloads)](https://pepy.tech/projects/n-filej)
 ## Features
 - **Directory Navigation**: Browse your files and folders in a terminal-based interface.
 - **File Opening**: Open files directly in your system's default editor (Windows) or the one defined in your `$EDITOR` environment variable (Linux/macOS).
