@@ -1,6 +1,7 @@
 import os
 import sys
 import subprocess
+import pyperclip
 from pathlib import Path
 from textual import events
 from textual.app import App, ComposeResult
@@ -29,6 +30,7 @@ class NFileJ(App):
         ("f2", "rename", "Rename Folder/File"),
         ("/", "focus_search", "Search"),
         ("escape", "focus_tree", "Back to Tree"),
+        ("alt+shift+c", "get_path", "Get File/Folder Path"),
     ]
 
     def on_mount(self) -> None:
@@ -139,6 +141,13 @@ class NFileJ(App):
                     self.notify(f"Error: {e}", severity="error")
 
         self.push_screen(RenameModal(old_name), perform_rename)      
+
+    def action_get_path(self) -> None:
+        tree = self.query_one(FilteredDirectoryTree)
+        if tree.cursor_node and tree.cursor_node.data:
+            path = str(tree.cursor_node.data.path)
+            pyperclip.copy(path)
+            self.notify(f"Copied path to clipboard!")
 
     def action_toggle_dark(self) -> None:
         self.theme = ("textual-light" if self.theme == "textual-dark" else "textual-dark")
