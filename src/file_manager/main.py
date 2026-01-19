@@ -37,7 +37,7 @@ class NFileJ(App):
         self.query_one(FilteredDirectoryTree).focus()
     def compose(self) -> ComposeResult:
         yield Header()
-        yield Input(placeholder="Search files...", id="search-bar") # New Search Bar
+        yield Input(placeholder="🔎 Search files...", id="search-bar") # New Search Bar
         yield FilteredDirectoryTree(Path("~").expanduser(), id="tree-container")
         yield Footer()
 
