@@ -9,13 +9,13 @@ class RenameModal(ModalScreen[str]):
         self.old_name = old_name
 
     def compose(self) -> ComposeResult:
-        yield Grid(
-            Label(f"Renaming: {self.old_name}", id="label"),
-            Input(value=self.old_name, id="new_name_input"),
-            Button("Rename", variant="success", id="rename_btn"),
-            Button("Cancel", variant="error", id="cancel_btn"),
-            id="modal_grid"
-        )
+        from textual.containers import Vertical, Horizontal
+        with Vertical(id="modal_grid"):
+            yield Label(f"✏️ Rename '{self.old_name}': Write the new name", id="label")
+            yield Input(value=self.old_name, id="new_name_input")
+            with Horizontal(id="button_row"):
+                yield Button("Rename", variant="success", id="rename_btn")
+                yield Button("Cancel", variant="error", id="cancel_btn")
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
         if event.button.id == "rename_btn":

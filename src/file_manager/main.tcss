@@ -19,36 +19,59 @@ NDirectoryTree > .directory-tree--extension, DirectoryTree > .directory-tree--ex
 
 ModalScreen {
     align: center middle;
+    background: rgba(0, 0, 0, 0.7); /* Deeply dim the background to make modal pop */
 }
 
 #modal_grid {
-    grid-size: 2;
-    grid-rows: auto auto auto;
-    grid-gutter: 1;
-    padding: 1 2;
-    width: 60;
+    width: 70;
     height: auto;
-    min-height: 12;
-    border: thick $primary;
+    padding: 1 2;
+    border: double $accent;
     background: $surface;
     color: $text;
 }
 
 #label {
-    column-span: 2;
+    width: 100%;
     content-align: center middle;
-    text-style: bold;
-    color: $accent;
+    text-style: bold italic;
+    color: $secondary;
     margin-bottom: 1;
 }
 
 #folder_name, #new_name_input {
-    column-span: 2;
-    border: tall $secondary;
+    width: 100%;
+    border: tall $primary;
     background: $boost;
     color: $text;
+    margin-bottom: 1;
 }
 
-#create, #rename_btn, #cancel, #cancel_btn {
-    width: 100%;
+#folder_name .input--placeholder,
+#new_name_input .input--placeholder {
+    color: $text-disabled;
+    text-style: italic;
 }
+
+#button_row {
+    width: 100%;
+    height: auto;
+}
+
+#button_row Button {
+    width: 1fr;
+}
+
+#create, #rename_btn {
+    background: $success;
+    color: $text;
+    margin-right: 1;
+}
+
+#cancel, #cancel_btn {
+    background: $error;
+    color: $text;
+    margin-left: 1;
+}
+
+
