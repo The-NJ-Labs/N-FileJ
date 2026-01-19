@@ -1,27 +1,20 @@
 import os
 import sys
 import subprocess
+from pathlib import Path
 from textual import events
 from textual.app import App, ComposeResult
-from textual.widgets import Header, Footer, DirectoryTree
+from textual.widgets import Header, Footer, Input, Static
 if __package__ is None or __package__ == "":
     from create_folder import CreateFolderModal
     from rename_modal import RenameModal
+    from filtered_tree import FilteredDirectoryTree
 else:
     from .create_folder import CreateFolderModal
     from .rename_modal import RenameModal
+    from .filtered_tree import FilteredDirectoryTree
 
-class NDirectoryTree(DirectoryTree):
-    """Custom DirectoryTree that tracks double clicks and Enter key."""
-    _should_open = False
 
-    def on_click(self, event: events.Click) -> None:
-        # Track if it was a double click, but don't interfere with internal logic
-        self._should_open = (event.chain == 2)
-
-    def on_key(self, event: events.Key) -> None:
-        # Track if it was Enter, but don't interfere with internal logic
-        self._should_open = (event.key == "enter")
 class NFileJ(App):
     """A simple file manager app."""
 
@@ -33,17 +26,31 @@ class NFileJ(App):
         ("q", "quit", "Quit"),
         ("alt+shift+n", "mkdir", "Create Folder"),
         ("delete", "delete", "Delete Folder/File"),
-        ("f2", "rename", "Rename Folder/File")
+        ("f2", "rename", "Rename Folder/File"),
+        ("/", "focus_search", "Search"),
+        ("escape", "focus_tree", "Back to Tree"),
     ]
 
+    def on_mount(self) -> None:
+        self.query_one(FilteredDirectoryTree).focus()
     def compose(self) -> ComposeResult:
         yield Header()
-        # Using custom NDirectoryTree for double-click support
-        yield NDirectoryTree(os.path.expanduser("~"), id="tree-container")
+        yield Input(placeholder="Search files...", id="search-bar") # New Search Bar
+        yield FilteredDirectoryTree("~", id="tree-container")
         yield Footer()
 
-    def on_directory_tree_file_selected(self, event: DirectoryTree.FileSelected) -> None:
-        tree = self.query_one(NDirectoryTree)
+    def on_input_changed(self, event: Input.Changed) -> None:
+        tree = self.query_one(FilteredDirectoryTree)
+        tree.update_filter(event.value)
+    
+    def action_focus_search(self) -> None:
+        self.query_one(Input).focus()
+
+    def action_focus_tree(self) -> None:
+        self.query_one(FilteredDirectoryTree).focus()
+
+    def on_directory_tree_file_selected(self, event: FilteredDirectoryTree.FileSelected) -> None:
+        tree = self.query_one(FilteredDirectoryTree)
         if getattr(tree, "_should_open", False):
             file_path = event.path
             self.run_editor(str(file_path))
