@@ -2,7 +2,7 @@ Screen {
     background: #1a1b26;
 }
 
-NDirectoryTree, DirectoryTree {
+NDirectoryTree, DirectoryTree, FilteredDirectoryTree {
     border: tall $accent;
     background: $surface;
     color: #a9b1d6;

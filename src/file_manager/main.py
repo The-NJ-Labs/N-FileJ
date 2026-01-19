@@ -4,7 +4,7 @@ import subprocess
 from pathlib import Path
 from textual import events
 from textual.app import App, ComposeResult
-from textual.widgets import Header, Footer, Input, Static
+from textual.widgets import Header, Footer, Input, Static, DirectoryTree
 if __package__ is None or __package__ == "":
     from create_folder import CreateFolderModal
     from rename_modal import RenameModal
@@ -36,12 +36,25 @@ class NFileJ(App):
     def compose(self) -> ComposeResult:
         yield Header()
         yield Input(placeholder="Search files...", id="search-bar") # New Search Bar
-        yield FilteredDirectoryTree("~", id="tree-container")
+        yield FilteredDirectoryTree(Path("~").expanduser(), id="tree-container")
         yield Footer()
 
     def on_input_changed(self, event: Input.Changed) -> None:
-        tree = self.query_one(FilteredDirectoryTree)
-        tree.update_filter(event.value)
+        if event.input.id == "search-bar":
+            self.debounce_search(event.value)
+
+    def debounce_search(self, value: str) -> None:
+        """Debounce search to avoid lag."""
+        if hasattr(self, "_search_timer"):
+            self._search_timer.stop()
+        self._search_timer = self.set_timer(0.3, lambda: self.perform_search(value))
+
+    def perform_search(self, value: str) -> None:
+        try:
+            tree = self.query_one(FilteredDirectoryTree)
+            tree.update_filter(value)
+        except Exception as e:
+            self.notify(f"Search error: {e}", severity="error")
     
     def action_focus_search(self) -> None:
         self.query_one(Input).focus()
@@ -49,7 +62,7 @@ class NFileJ(App):
     def action_focus_tree(self) -> None:
         self.query_one(FilteredDirectoryTree).focus()
 
-    def on_directory_tree_file_selected(self, event: FilteredDirectoryTree.FileSelected) -> None:
+    def on_directory_tree_file_selected(self, event: DirectoryTree.FileSelected) -> None:
         tree = self.query_one(FilteredDirectoryTree)
         if getattr(tree, "_should_open", False):
             file_path = event.path
@@ -69,7 +82,7 @@ class NFileJ(App):
                 print(f"Error opening editor: {e}")
 
     def action_mkdir(self) -> None:
-        tree = self.query_one(NDirectoryTree)
+        tree = self.query_one(FilteredDirectoryTree)
         
         # Determine the base directory for the new folder
         if tree.cursor_node and tree.cursor_node.data:
@@ -92,7 +105,7 @@ class NFileJ(App):
         self.push_screen(CreateFolderModal(), check_name)
 
     def action_delete(self) -> None:
-        tree = self.query_one(DirectoryTree)
+        tree = self.query_one(FilteredDirectoryTree)
         if tree.cursor_node and tree.cursor_node.data:
             file_path = tree.cursor_node.data.path
             try:
@@ -106,7 +119,7 @@ class NFileJ(App):
                 self.notify(f"Error: {e}", severity="error")    
 
     def action_rename(self) -> None:
-        tree = self.query_one(DirectoryTree)
+        tree = self.query_one(FilteredDirectoryTree)
         if not tree.cursor_node or not tree.cursor_node.data:
             return
 
