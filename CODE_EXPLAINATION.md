@@ -44,7 +44,7 @@ else:
 ```python
 class NFileJ(App):
     """A simple file manager app."""
-    CSS_PATH = "main.tcss"
+    CSS_PATH = "main.css"
     BINDINGS = [
         ("alt+t", "toggle_dark", "Toggle mode(Dark/Light)"),
         ("q", "quit", "Quit"),

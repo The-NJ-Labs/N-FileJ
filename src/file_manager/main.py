@@ -19,7 +19,7 @@ else:
 class NFileJ(App):
     """A simple file manager app."""
 
-    CSS_PATH = "main.tcss"
+    CSS_PATH = "main.css"
 
     # Removed "enter" from here because the Tree handles it internally
     BINDINGS = [

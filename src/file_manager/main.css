@@ -1,5 +1,6 @@
 Screen {
     background: #1a1b26;
+    layout: vertical
 }
 
 NDirectoryTree, DirectoryTree, FilteredDirectoryTree {
@@ -74,4 +75,11 @@ ModalScreen {
     margin-left: 1;
 }
 
+#tree-container {
+    height: 1fr;
+    border: solid $accent;
+}
 
+Footer {
+    dock: bottom;
+}
