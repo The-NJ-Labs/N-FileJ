@@ -87,6 +87,30 @@ ModalScreen {
     border: solid $accent;
 }
 
+#search-container {
+    height: 3;
+    border: tall $primary;
+    background: $boost;
+    margin: 0 1;
+    color: $text;
+}
+
+#search-icon {
+    width: 3;
+    content-align: center middle;
+    color: $secondary;
+}
+
+#search-bar {
+    width: 1fr;
+    border: none;
+    background: transparent;
+}
+
+#search-bar:focus {
+    border: none;
+}
+
 MultilineFooter {
     dock: bottom;
     height: auto;

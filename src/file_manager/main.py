@@ -5,6 +5,7 @@ import pyperclip
 from pathlib import Path
 from textual import events
 from textual.app import App, ComposeResult
+from textual.containers import Horizontal
 from textual.widgets import Header, Footer, Input, Static, DirectoryTree
 if __package__ is None or __package__ == "":
     from create_folder import CreateFolderModal
@@ -61,7 +62,9 @@ class NFileJ(App):
         self.query_one(FilteredDirectoryTree).focus()
     def compose(self) -> ComposeResult:
         yield Header()
-        yield Input(placeholder="🔎 Search files...", id="search-bar") # New Search Bar
+        with Horizontal(id="search-container"):
+            yield Static("🔎", id="search-icon")
+            yield Input(placeholder="Search files...", id="search-bar")
         yield FilteredDirectoryTree(Path("~").expanduser(), id="tree-container")
         yield MultilineFooter()
 
