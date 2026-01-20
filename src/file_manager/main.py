@@ -1,7 +1,9 @@
 import os
 import sys
+import shutil
 import subprocess
 import pyperclip
+import re
 from pathlib import Path
 from textual import events
 from textual.app import App, ComposeResult
@@ -20,8 +22,6 @@ else:
 
 
 class MultilineFooter(Static):
-    """A footer that wraps onto multiple lines when space is limited."""
-    
     def on_mount(self) -> None:
         self.update_content()
         # Refresh whenever focus changes to update binding context
@@ -63,6 +63,9 @@ class NFileJ(App):
         ("/", "focus_search", "Search"),
         ("escape", "focus_tree", "Tree"),
         ("alt+shift+n", "mkdir", "New Folder"),
+        ("ctrl+c", "copy", "Copy"),
+        ("ctrl+x", "cut", "Cut"),
+        ("ctrl+v", "paste", "Paste"),
         ("f2", "rename", "Rename"),
         ("alt+shift+c", "get_path", "Copy Path"),
         ("delete", "delete", "Delete"),
@@ -70,7 +73,11 @@ class NFileJ(App):
         ("q", "quit", "Quit"),
     ]
 
+    source_path: Path | None = None
+    is_cut: bool = False
+
     def on_mount(self) -> None:
+        self.source_path: Path | None = None
         self.query_one(FilteredDirectoryTree).focus()
     def compose(self) -> ComposeResult:
         yield Header()
@@ -145,7 +152,69 @@ class NFileJ(App):
 
         self.push_screen(CreateFolderModal(), check_name)
 
-    def action_delete(self) -> None:
+    def action_copy(self, path: Path | None = None) -> None:
+        self.is_cut = False
+        tree = self.query_one(FilteredDirectoryTree)
+        if tree.cursor_node and tree.cursor_node.data:
+            self.source_path = tree.cursor_node.data.path
+            self.notify(f"Copied: {self.source_path.name}")
+            
+    def action_cut(self, path: Path | None = None) -> None:
+        self.is_cut = True
+        tree = self.query_one(FilteredDirectoryTree)
+        if tree.cursor_node and tree.cursor_node.data:
+            self.source_path = tree.cursor_node.data.path
+            self.notify(f"Cut: {self.source_path.name}")
+
+    def action_paste(self) -> None:
+        tree = self.query_one(FilteredDirectoryTree)
+        if not self.source_path or not self.source_path.exists():
+            self.notify("Nothing to Paste or Source Missing!", severity="error")
+            return
+        
+        # 1. Figure out WHERE we are pasting
+        target_node = tree.cursor_node
+        if target_node and target_node.data:
+            target_path = target_node.data.path
+            base_dir = target_path if target_path.is_dir() else target_path.parent
+        else:
+            base_dir = Path.cwd()
+
+        # 2. Smart Naming Logic (Prevents the (1)(1)(1) nightmare)
+        stem = self.source_path.stem
+        suffix = self.source_path.suffix
+        
+        clean_stem = re.sub(r'\s\(\d+\)$', '', stem)
+        
+        new_path = base_dir / f"{clean_stem}{suffix}"
+        counter = 1
+        
+        # Keep incrementing until we find a name that DOES NOT exist
+        while new_path.exists():
+            new_path = base_dir / f"{clean_stem} ({counter}){suffix}"
+            counter += 1
+
+        # 3. The Actual Move/Copy
+        try:
+            if self.is_cut:
+                # SHIFT+DELETE logic: shutil.move is the correct way to 'Cut'
+                # It handles the move and the deletion of the source in one atomic step
+                shutil.move(str(self.source_path), str(new_path))
+                self.source_path = None # Clear clipboard after move
+                self.notify(f"Moved to: {new_path.name}")
+            else:
+                # Standard Copy
+                if self.source_path.is_dir():
+                    shutil.copytree(self.source_path, new_path)
+                else:
+                    shutil.copy2(self.source_path, new_path)
+                self.notify(f"Pasted: {new_path.name}")
+            
+            tree.reload()
+        except Exception as e:
+            self.notify(f"Error: {e}", severity="error")
+            
+    def action_delete(self, path: Path | None = None) -> None:
         tree = self.query_one(FilteredDirectoryTree)
         if tree.cursor_node and tree.cursor_node.data:
             file_path = tree.cursor_node.data.path
