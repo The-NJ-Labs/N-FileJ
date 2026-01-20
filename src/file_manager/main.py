@@ -7,6 +7,8 @@ from textual import events
 from textual.app import App, ComposeResult
 from textual.containers import Horizontal
 from textual.widgets import Header, Footer, Input, Static, DirectoryTree
+from rich.text import Text
+from rich.markup import escape
 if __package__ is None or __package__ == "":
     from create_folder import CreateFolderModal
     from rename_modal import RenameModal
@@ -15,7 +17,6 @@ else:
     from .create_folder import CreateFolderModal
     from .rename_modal import RenameModal
     from .filtered_tree import FilteredDirectoryTree
-from rich.text import Text
 
 
 class MultilineFooter(Static):
@@ -30,15 +31,26 @@ class MultilineFooter(Static):
         self.update_content()
 
     def update_content(self, *args, **kwargs) -> None:
-        text = Text()
+        parts = []
         # Access the BINDINGS from the App class
         app_bindings = getattr(self.app, "BINDINGS", [])
         
-        for key, action, description in app_bindings:
-            text.append(f" {key.upper()} ", style="bold reverse")
-            text.append(f" {description}  ")
+        for binding in app_bindings:
+            # Handle both tuples and Binding objects safely
+            if isinstance(binding, tuple):
+                key, action, description = binding
+            else:
+                key = getattr(binding, "key", "")
+                action = getattr(binding, "action", "")
+                description = getattr(binding, "description", "")
+
+            # Use Textual markup for the whole thing to ensure links work
+            # We explicitly set NO underline to keep the look clean
+            # Adding a bit more padding around the items
+            part = f"[bold reverse] {escape(key.upper())} [/] [@click=app.{action}]{escape(description)}[/]"
+            parts.append(part)
         
-        self.update(text)
+        self.update("    ".join(parts))
 
 
 class NFileJ(App):
