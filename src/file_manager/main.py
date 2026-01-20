@@ -47,14 +47,14 @@ class NFileJ(App):
 
     # Removed "enter" from here because the Tree handles it internally
     BINDINGS = [
-        ("alt+t", "toggle_dark", "Dark/Light"),
-        ("q", "quit", "Quit"),
-        ("alt+shift+n", "mkdir", "New Folder"),
-        ("delete", "delete", "Delete"),
-        ("f2", "rename", "Rename"),
         ("/", "focus_search", "Search"),
         ("escape", "focus_tree", "Tree"),
+        ("alt+shift+n", "mkdir", "New Folder"),
+        ("f2", "rename", "Rename"),
         ("alt+shift+c", "get_path", "Copy Path"),
+        ("delete", "delete", "Delete"),
+        ("alt+t", "toggle_dark", "Dark/Light"),
+        ("q", "quit", "Quit"),
     ]
 
     def on_mount(self) -> None:
