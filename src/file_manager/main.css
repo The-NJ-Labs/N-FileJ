@@ -3,13 +3,16 @@ Screen {
     layout: vertical
 }
 
-NDirectoryTree, DirectoryTree, FilteredDirectoryTree {
+NDirectoryTree,
+DirectoryTree,
+FilteredDirectoryTree {
     border: tall $accent;
     background: $surface;
     color: #a9b1d6;
 }
 
-NDirectoryTree > .directory-tree--extension, DirectoryTree > .directory-tree--extension {
+NDirectoryTree>.directory-tree--extension,
+DirectoryTree>.directory-tree--extension {
     color: $secondary;
 }
 
@@ -20,7 +23,8 @@ NDirectoryTree > .directory-tree--extension, DirectoryTree > .directory-tree--ex
 
 ModalScreen {
     align: center middle;
-    background: rgba(0, 0, 0, 0.7); /* Deeply dim the background to make modal pop */
+    background: rgba(0, 0, 0, 0.7);
+    /* Deeply dim the background to make modal pop */
 }
 
 #modal_grid {
@@ -40,7 +44,8 @@ ModalScreen {
     margin-bottom: 1;
 }
 
-#folder_name, #new_name_input {
+#folder_name,
+#new_name_input {
     width: 100%;
     border: tall $primary;
     background: $boost;
@@ -63,13 +68,15 @@ ModalScreen {
     width: 1fr;
 }
 
-#create, #rename_btn {
+#create,
+#rename_btn {
     background: $success;
     color: $text;
     margin-right: 1;
 }
 
-#cancel, #cancel_btn {
+#cancel,
+#cancel_btn {
     background: $error;
     color: $text;
     margin-left: 1;
@@ -80,6 +87,13 @@ ModalScreen {
     border: solid $accent;
 }
 
-Footer {
+MultilineFooter {
     dock: bottom;
+    height: auto;
+    min-height: 1;
+    background: $boost;
+    color: $text;
+    padding: 0 1;
+    text-wrap: wrap;
+    border-top: solid $accent;
 }

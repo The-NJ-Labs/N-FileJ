@@ -14,6 +14,30 @@ else:
     from .create_folder import CreateFolderModal
     from .rename_modal import RenameModal
     from .filtered_tree import FilteredDirectoryTree
+from rich.text import Text
+
+
+class MultilineFooter(Static):
+    """A footer that wraps onto multiple lines when space is limited."""
+    
+    def on_mount(self) -> None:
+        self.update_content()
+        # Refresh whenever focus changes to update binding context
+        self.watch(self.app, "focused", self.update_content)
+
+    def on_resize(self, event: events.Resize) -> None:
+        self.update_content()
+
+    def update_content(self, *args, **kwargs) -> None:
+        text = Text()
+        # Access the BINDINGS from the App class
+        app_bindings = getattr(self.app, "BINDINGS", [])
+        
+        for key, action, description in app_bindings:
+            text.append(f" {key.upper()} ", style="bold reverse")
+            text.append(f" {description}  ")
+        
+        self.update(text)
 
 
 class NFileJ(App):
@@ -23,14 +47,14 @@ class NFileJ(App):
 
     # Removed "enter" from here because the Tree handles it internally
     BINDINGS = [
-        ("alt+t", "toggle_dark", "Toggle mode(Dark/Light)"),
+        ("alt+t", "toggle_dark", "Dark/Light"),
         ("q", "quit", "Quit"),
-        ("alt+shift+n", "mkdir", "Create Folder"),
-        ("delete", "delete", "Delete Folder/File"),
-        ("f2", "rename", "Rename Folder/File"),
+        ("alt+shift+n", "mkdir", "New Folder"),
+        ("delete", "delete", "Delete"),
+        ("f2", "rename", "Rename"),
         ("/", "focus_search", "Search"),
-        ("escape", "focus_tree", "Back to Tree"),
-        ("alt+shift+c", "get_path", "Get File/Folder Path"),
+        ("escape", "focus_tree", "Tree"),
+        ("alt+shift+c", "get_path", "Copy Path"),
     ]
 
     def on_mount(self) -> None:
@@ -39,7 +63,7 @@ class NFileJ(App):
         yield Header()
         yield Input(placeholder="🔎 Search files...", id="search-bar") # New Search Bar
         yield FilteredDirectoryTree(Path("~").expanduser(), id="tree-container")
-        yield Footer()
+        yield MultilineFooter()
 
     def on_input_changed(self, event: Input.Changed) -> None:
         if event.input.id == "search-bar":
