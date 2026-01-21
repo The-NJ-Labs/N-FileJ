@@ -1,0 +1,29 @@
+name: Publish to PyPI
+
+on:
+  release:
+    types: [published] # Triggers when you click "Publish Release" on GH
+
+jobs:
+  build-n-publish:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write  # Mandatory for Trusted Publishing
+      contents: write  # Allows uploading assets to the GH Release
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Build distributions
+        run: python -m build
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+
+      - name: Upload artifacts to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*
