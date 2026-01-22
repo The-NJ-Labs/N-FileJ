@@ -1,7 +1,7 @@
 # N-FileJ
 
 A TUI-Based File manager written in Python using [Textual](https://github.com/Textualize/textual).
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/5621d021-466b-40c9-aca1-16258dc90622" />
+<img width="1119" height="649" alt="image" src="https://github.com/user-attachments/assets/31569b1e-6e7f-4d0d-9234-8aed97a69103" />
 [![PyPI Downloads](https://static.pepy.tech/personalized-badge/n-filej?period=total&units=INTERNATIONAL_SYSTEM&left_color=BLACK&right_color=GREEN&left_text=Downloads)](https://pepy.tech/projects/n-filej)
 ## Features
 - **Directory Navigation**: Browse your files and folders in a terminal-based interface.
