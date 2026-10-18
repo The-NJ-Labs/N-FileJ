@@ -1,5 +1,6 @@
 # N-FileJ
-# Not for everyday use - has serious bugs - use it in safe environment for testing 
+## [Unfinished]
+## Not for everyday use - has serious bugs - use it in safe environment for testing 
 A TUI-Based File manager written in Python using [Textual](https://github.com/Textualize/textual).
 <img width="1119" height="649" alt="image" src="https://github.com/user-attachments/assets/31569b1e-6e7f-4d0d-9234-8aed97a69103" />
 [![PyPI Downloads](https://static.pepy.tech/personalized-badge/n-filej?period=total&units=INTERNATIONAL_SYSTEM&left_color=BLACK&right_color=GREEN&left_text=Downloads)](https://pepy.tech/projects/n-filej)
